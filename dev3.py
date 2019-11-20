@@ -23,17 +23,26 @@ def test():
 
 
     # A et B deux ensembles de même grandeur triés du plus petit au plus grand
+    # On definit tableau A comme etant le tableau dont la fenetre "slide" vers le haut et B le tableau dont la fenetre
+    # descend vers le bas.
+    #
+    # L'algo fonctionne en bougeant la fenetre par laquelle on voit les tableaux de plus en plus vers leur mediane
+    # respective. Une fois la mediane de chaque tableau trouvee, le fait qu'ils sont tries nous assure que la mediane
+    # des deux tableaux ensemble sera celle en position 2 de la jointure entre les fenetres.
+    #
+    # (Definition de "fenetre": c'est la vue du tableau. Par exemple, une fenetre de 2 a 4 dans [0,1,2,3,4,5,6,7...]
+    # voudrait dire qu'on voit le tableau [2,3])
     def find_merged_median(A, B):
-        def iter_mediam(arr, lower, upper):
+        def get_median(arr, lower, upper):  # La mediane
             index = (lower + upper) // 2
             return arr[index], index
 
         a_min = b_min = 0
         a_max = b_max = len(A)-1
 
-        while (a_max - a_min) >= 2 and (b_max - b_min) >= 2:
-            mA, a_index = iter_mediam(A, a_min, a_max)
-            mB, b_index = iter_mediam(B, b_min, b_max)
+        while (a_max - a_min) > 2 and (b_max - b_min) > 2:
+            mA, a_index = get_median(A, a_min, a_max)
+            mB, b_index = get_median(B, b_min, b_max)
 
             if mA < mB:
                 a_max, b_max = b_max, a_max
@@ -41,26 +50,20 @@ def test():
                 a_index, b_index = b_index, a_index
                 A, B = B, A
 
+            if (b_max - b_min) % 2 == 0:    # S'assure que les deux tableaux seront de meme taille!
+                b_index -= 1
+
             a_max = a_index + 1
             b_min = b_index
-
-        #print(a_max - a_min)
-        #print(b_max - b_min)
-        b_min -= 1
-        a_min += 1
 
         merged = A[a_min:a_max]
         merged.extend(B[b_min:b_max])
         merged = list(sorted(merged))
-        def get_median(arr):
-            return arr[math.floor(len(arr)/2)]
-
-        print(merged)
-        return get_median(merged)
+        return merged[2]
 
     return find_merged_median(a,b)
 
 while True:
     print("calc")
-    if test() != 500:
+    if test() != 499:
         exit()
