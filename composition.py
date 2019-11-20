@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 # Gauthier Charlie 20105623
 
@@ -8,24 +8,40 @@ def compose(m1, m2):
 
 # s, un set de mappings
 # f, un mapping qu'on cherche dans <s>
+# fonction basee sur l'algo d'appartenance de permutations stupide puisqu'il ne se base pas sur le fait que les tuples
+# soient des permutations. https://studium.umontreal.ca/pluginfile.php/5018181/mod_resource/content/1/1intro.pdf page
+# 36/42.
+#
+# Je l'ai un peu modifie: on remarque qu'il y a un seul endroit ou on genere de nouvelles compositions. On peut donc y
+# tester directement si cette nouvelle composition est f, ce qui nous évite beaucoup de tours de boucles potentiels si
+# on ne regardait qu'a la fin comme dans l'algo original.
+#
+# Pour pallier au fait qu'on ne regarde plus a la fin si f est dans S ou S', on teste si f est dans s des le debut de la
+# fonction.
+#
+# Pour finir, on sait que f n'est pas dans S comme dans l'original: si on ne trouve pas f ET qu'on ne trouve plus de
+# nouvelles compositions.
 def composition(s,f):
-    S = set()
-    Sprim = s
+    if f in s:
+        return True
 
-    while S != Sprim:
-        S = Sprim
+    S = set()   # S est le set de mappings qu'on a genere le dernier tour de boucle
+    Sprim = s   # Spim est le set de mappings genere ce tour de boucle
 
-        genned = set()
-        for m1 in S:
+    while S != Sprim:       # Tant qu'on ne trouve plus de nouvelles compositions
+        S = Sprim           # On update S
+
+        genned = set()      # On fait un set temporaire qui contient les compositions generees ce tour-ci
+        for m1 in S:        # Pour chaque paire de fonction dans S, dans les deux ordres
             for m2 in S:
-                comp = compose(m1, m2)
-                if comp == f:
-                    return True
-                genned.add(comp)
+                comp = compose(m1, m2)  # On compose la paire
+                if comp == f:           # Si la composition est f
+                    return True         # On a true
+                genned.add(comp)        # Sinon, on l'ajoute aux compositions generees
 
-        Sprim = Sprim.union(genned)
+        Sprim = Sprim.union(genned) # Après toutes les compositions, on les ajoute au Sprim
 
-    return False
+    return False    # Si on a tout genere les compositions possibles, et qu'on a pas trouve f, False.
 
 
 
@@ -68,5 +84,3 @@ print(composition(s3,f3))
 print(composition(s4,f4))
 print(composition(s5,f5))
 print(composition(s6,f6))
-
-
