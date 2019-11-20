@@ -2,25 +2,6 @@
 
 # Gauthier Charlie 20105623
 
-# Nom/Name Prénom/Given name Matricule/Student ID
-# Nom/Name Prénom/Given name Matricule/Student ID
-
-def f(n):
-    m=0
-    for i in range(n):
-        m+=2*n
-    return m
-
-def g(n):
-    m=0
-    for i in range(n):
-        m+=f(i)
-    return m
-
-print(g(6))
-print(g(5))
-print(g(4))
-
 # Compose deux mappings ensemble, de gauche a droite
 def compose(m1, m2):
     return tuple([m2[m1[i]-1] for i in range(len(m1))])
@@ -45,6 +26,8 @@ def composition(s,f):
         Sprim = Sprim.union(genned)
 
     return False
+
+
 
 f11 = tuple([3, 1, 3, 4]) # 1->3 2->1 3->3 4->4
 f12 = tuple([3, 4, 2, 1]) # tuples car une liste ne peut pas
