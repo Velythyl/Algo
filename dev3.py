@@ -31,6 +31,12 @@ def find_merged_median(A, B):
         index = (lower+upper)//2        # lorsque la fenetre est de longueur paire
         return arr[index], index
 
+    if len(A) < 3:  # Cas degenere
+        A.extend(B)
+        A = list(sorted(A))
+        m, _ = get_median(A, lower=0, upper=len(A))
+        return m
+
     a_min = b_min = 0   # initialement, les fenetres font toute la longueur des tableaux
     a_max = b_max = len(A)-1
     while (a_max - a_min) > 2:
@@ -58,7 +64,7 @@ def find_merged_median(A, B):
     return merged[2]
 
 while True:
-    temp = list(sorted(list(range(2*3863))))
+    temp = list(sorted(list(range(2*2))))
     median = temp[(len(temp)-1)//2]
 
     random.shuffle(temp)
